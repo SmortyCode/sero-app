@@ -1,0 +1,43 @@
+<!--
+  SERO — Monogramm-in-Slab (Fassung 2)
+  ------------------------------------
+  Gegenüber Fassung 1 nachgeschärft: der Slab füllt das Feld deutlicher aus,
+  das S ist von 31 auf 41 Einheiten Höhe gewachsen und trägt damit auch bei
+  29 px. Die Label-Zone ist flacher, damit dem Kartenfeld mehr Raum bleibt.
+
+  Die Silhouette eines Grading-Holders: kein Mitbewerber nutzt sie, und jeder
+  Sammler erkennt sie in einem Sekundenbruchteil. Das S innen hat statt der
+  klassischen Kurve einen GERADEN, steigenden Mittelzug — dasselbe Motiv wie
+  die grüne Kerze im Portfolio-Chart. Das Zeichen erzählt damit selbst, worum
+  es geht: aus Karten wird Wert.
+
+  Alles monolinear in EINER Strichstärke, auf currentColor:
+  - skaliert von 16 px bis 1024 px ohne Anpassung
+  - besteht den iOS-18-Tinted-Test ohne Extra-Datei
+  - braucht im Dunkelmodus keinen Invert-Filter (anders als die PNG-Logos)
+
+  Raster: 100×100. Strichstärke 4 = 4 % der Kante.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+     fill="none" stroke="currentColor" stroke-width="4"
+     stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="SERO">
+
+  <!-- Slab-Umriss: füllt das Feld bis auf die optische Randluft -->
+  <rect x="22" y="8" width="56" height="84" rx="8" ry="8"/>
+
+  <!-- Label-Zone: flach gehalten (20 % der Slab-Höhe), damit unten Platz bleibt -->
+  <line x1="22" y1="25" x2="78" y2="25"/>
+  <!-- Grade-Badge-Andeutung — bewusst ohne Mikro-Typo, die klein zerfiele -->
+  <circle cx="67" cy="16.5" r="3.6"/>
+
+  <!-- Das S im Kartenfeld. Der Mittelzug ist die gerade Steigung
+       (von unten links nach oben rechts), kein klassischer Bogen. -->
+  <path d="M64 48
+           C64 42.5 58 39.5 50 39.5
+           C42 39.5 36 42.5 36 48.2
+           C36 52.4 40 54.4 45 56.2
+           L55 61.8
+           C60 63.6 64 65.6 64 70.5
+           C64 76.2 58 79.2 50 79.2
+           C42 79.2 36 76.2 36 70.7"/>
+</svg>
