@@ -226,8 +226,11 @@ function showScanResult(item) {
               : `<div class="res-photo">${MONO_PH}</div>`}
       <h2 class="res-name">${esc(item.name || L("Neues Stück"))}</h2>
       ${sub ? `<p class="res-sub">${esc(sub)}</p>` : ""}
-      <div class="res-val tnum">${val === null ? L("Wert wird noch ermittelt") : ""}</div>
-      ${item.price_label ? `<div class="res-src"><span>${esc(item.price_label)}</span></div>` : "<div style='height:10px'></div>"}
+      <div class="res-val tnum">${val === null ? (item.status === "ready" ? L("Wert unbekannt") : L("Wert wird noch ermittelt")) : ""}</div>
+      ${item.price_label ? `<div class="res-src"><span>${esc(item.price_label)}</span></div>`
+        : (val === null && item.status === "ready"
+           ? `<div class="res-src"><span>${L("Kein belegter Marktwert — trag deinen Preis beim Listen selbst ein")}</span></div>`
+           : "<div style='height:10px'></div>")}
       <div class="party-actions">
         <button class="btn-primary" id="resOpen">${L("Zum Stück")}</button>
         <button class="btn-secondary" id="resNext">${L("Weiter scannen")}</button>
@@ -362,7 +365,7 @@ function attachPTR(scrollEl, onRefresh) {
 const SOURCE_INFO = {
   cardmarket: ["Cardmarket-Trend", "Cardmarket ist Europas größter Marktplatz für Sammelkarten. Der Trend-Preis ist der geglättete Durchschnitt der tatsächlichen Verkaufspreise der letzten Tage — die verlässlichste Zahl für den aktuellen Wert deiner Karte. SERO aktualisiert ihn automatisch."],
   ebay: ["eBay-Median", "SERO sucht aktuelle eBay-Sofortkauf-Angebote für vergleichbare Stücke, entfernt Ausreißer und nimmt den mittleren Preis (Median). Das zeigt, wofür vergleichbare Stücke gerade angeboten werden — Verkaufspreise können leicht darunter liegen."],
-  estimate: ["KI-Schätzung", "Für dieses Stück gibt es noch keine verlässlichen Marktdaten. Die Zahl ist eine Einschätzung der SERO-KI anhand ähnlicher Produkte — als grobe Orientierung gedacht. Sobald echte Angebote auftauchen, ersetzt SERO sie automatisch."],
+  estimate: ["KI-Schätzung (veraltet)", "Dieser Wert stammt aus einer früheren KI-Einschätzung. SERO vergibt solche Werte nicht mehr — beim nächsten Preis-Update wird er durch echte Marktdaten ersetzt oder ehrlich als unbekannt angezeigt."],
   scryfall: ["Cardmarket (Scryfall)", "Der aktuelle Cardmarket-Preis dieser Magic-Karte, bezogen über die freie Scryfall-Datenbank."],
   ygoprodeck: ["Cardmarket (YGOPRODeck)", "Der aktuelle Cardmarket-Preis dieser Yu-Gi-Oh-Karte, bezogen über die freie YGOPRODeck-Datenbank."],
   listing: ["Listing-Preis", "Dieses Stück wurde aus deinen eBay-Listings importiert — als Wert dient dein Angebotspreis, bis SERO eine echte Marktquelle findet (Preis aktualisieren antippen)."],
@@ -661,6 +664,17 @@ const STR_EN = {
   "{0} Sek": "{0} sec", "Sekunden": "Seconds", "pro Stück": "per item",
   "Felder": "fields", "von Hand": "by hand", "Grader": "graders", "Stücke erfasst": "items captured",
   "Neues Stück": "New item", "Wert wird noch ermittelt": "Determining value …",
+  "Kein belegter Marktwert — trag deinen Preis beim Listen selbst ein": "No verified market value — enter your own price when listing",
+  "eBay-Setup abschließen": "Finish eBay setup",
+  "eBay braucht einen Versandstandort. Die Adresse wird nicht öffentlich angezeigt.": "eBay needs a shipping location. The address is never shown publicly.",
+  "Straße und Hausnummer": "Street and number", "PLZ": "ZIP", "Stadt": "City",
+  "Vorhandene Verkaufsrichtlinien aus deinem eBay-Konto werden übernommen — es wird nichts doppelt angelegt.": "Existing selling policies from your eBay account are reused — nothing is created twice.",
+  "Setup abschließen": "Finish setup",
+  "eBay verbinden": "Connect eBay",
+  "Bevor das Setup starten kann, verbinde zuerst dein eBay-Konto auf der Website.": "Before setup can start, connect your eBay account on the website first.",
+  "Öffne die Website, melde dich mit derselben E-Mail an und tippe auf „Mit eBay verbinden“. Danach kommst du hierher zurück.": "Open the website, sign in with the same email and tap “Connect with eBay”. Then come back here.",
+  "Website öffnen": "Open website",
+  "Setup abgeschlossen — du kannst jetzt listen": "Setup complete — you can list now",
   "Deine Gratis-Scans sind aufgebraucht": "You've used all your free scans",
   "Mit SERO Premium scannst du ohne Limit weiter.": "SERO Premium removes the scan limit.",
   "Scans genutzt": "scans used", "Unbegrenzte Scans": "Unlimited scans",
@@ -759,8 +773,9 @@ const STR_EN = {
   "SERO sucht aktuelle eBay-Sofortkauf-Angebote für vergleichbare Stücke, entfernt Ausreißer und nimmt den mittleren Preis (Median). Das zeigt, wofür vergleichbare Stücke gerade angeboten werden — Verkaufspreise können leicht darunter liegen.":
     "SERO looks up current eBay Buy It Now offers for comparable items, drops the outliers and takes the middle price (median). That shows what comparable items are being asked for right now — actual sale prices can be slightly lower.",
   "KI-Schätzung": "AI estimate",
-  "Für dieses Stück gibt es noch keine verlässlichen Marktdaten. Die Zahl ist eine Einschätzung der SERO-KI anhand ähnlicher Produkte — als grobe Orientierung gedacht. Sobald echte Angebote auftauchen, ersetzt SERO sie automatisch.":
-    "There is no reliable market data for this item yet. The figure is an estimate from the SERO AI based on similar products — treat it as a rough guide. As soon as real offers show up, SERO replaces it automatically.",
+  "KI-Schätzung (veraltet)": "AI estimate (outdated)",
+  "Dieser Wert stammt aus einer früheren KI-Einschätzung. SERO vergibt solche Werte nicht mehr — beim nächsten Preis-Update wird er durch echte Marktdaten ersetzt oder ehrlich als unbekannt angezeigt.":
+    "This value comes from an earlier AI estimate. SERO no longer assigns such values — the next price update replaces it with real market data or honestly shows it as unknown.",
   "Cardmarket (Scryfall)": "Cardmarket (Scryfall)",
   "Der aktuelle Cardmarket-Preis dieser Magic-Karte, bezogen über die freie Scryfall-Datenbank.":
     "The current Cardmarket price of this Magic card, sourced from the free Scryfall database.",
@@ -885,7 +900,6 @@ const STR_EN = {
 
   /* ── Detail: Übersicht & Wert ── */
   "Übersicht": "Overview", " · Live": " · Live", " · Entwurf": " · Draft",
-  "KI-Schätzung {0} – {1}": "AI estimate {0} – {1}",
   "eBay: {0} aktive Angebote · Median {1}": "eBay: {0} active offers · median {1}",
   "Preisalarm": "Price alert", "Preis aktualisieren": "Refresh price",
   "Stand {0}": "As of {0}",
@@ -940,8 +954,8 @@ const STR_EN = {
     "Price source does not clearly match this item.",
   "Die Quellen widersprechen sich zu stark.":
     "The sources disagree too strongly.",
-  "Keine belastbaren Vergleichsdaten — SERO sucht automatisch weiter.":
-    "No reliable comparison data — SERO keeps searching automatically.",
+  "Keine belastbaren Vergleichsdaten. Beim Listen trägst du deinen Preis selbst ein — findet SERO später Belege, übernimmt es sie.":
+    "No reliable comparison data. Enter your own price when listing — if SERO finds evidence later, it takes over.",
   "Median {0}": "Median {0}", "{0} Angebote": "{0} offers",
   "Nur {0} Angebote — zu wenige für einen belastbaren Median":
     "Only {0} offers — too few for a reliable median",
@@ -1794,8 +1808,8 @@ function filteredItems() {
     (!q || (i.name || "").toLowerCase().includes(q)));
   const by = {
     new: (a, b) => (b.created_at || 0) - (a.created_at || 0),
-    valdesc: (a, b) => (b.est_value || 0) - (a.est_value || 0),
-    valasc: (a, b) => (a.est_value || 0) - (b.est_value || 0),
+    valdesc: (a, b) => (b.est_value ?? -1) - (a.est_value ?? -1),
+    valasc: (a, b) => (a.est_value ?? Infinity) - (b.est_value ?? Infinity),
     name: (a, b) => (a.name || "").localeCompare(b.name || ""),
     delta: (a, b) => Math.abs(b.delta7 || 0) - Math.abs(a.delta7 || 0),
   };
@@ -2607,6 +2621,39 @@ function emptyState({ icon: ic = "stack", titel, text, aktion, onAktion }) {
 
 /* ── Sammler-Fortschritt: Stufe, Punkte, Set-Lücken ── */
 /* ── Profil bearbeiten: Name, Avatar, Anmelde-Kennung ── */
+/* ── eBay-Setup direkt in der App abschließen (vorher nur via Telegram-Bot
+   oder Website möglich — der teuerste Onboarding-Blocker). Richtlinien werden
+   automatisch angelegt/übernommen; die App fragt nur die Versandadresse ab. ── */
+function openSetupSheet(me) {
+  if (!me.ebay_connected) {
+    openSheet(L("eBay verbinden"), L("Bevor das Setup starten kann, verbinde zuerst dein eBay-Konto auf der Website."),
+      `<p class="sheet-hint" style="font-size:15px;line-height:1.55;margin:0">${L("Öffne die Website, melde dich mit derselben E-Mail an und tippe auf „Mit eBay verbinden“. Danach kommst du hierher zurück.")}</p>`,
+      async () => { window.open(url("/onboarding.html"), "_blank"); closeSheet(); }, L("Website öffnen"));
+    return;
+  }
+  openSheet(L("eBay-Setup abschließen"), L("eBay braucht einen Versandstandort. Die Adresse wird nicht öffentlich angezeigt."),
+    `<input id="suStreet" type="text" placeholder="${esc(L("Straße und Hausnummer"))}">
+     <div style="display:flex;gap:10px;margin-top:10px">
+       <input id="suPlz" type="text" inputmode="numeric" maxlength="5" placeholder="${esc(L("PLZ"))}" style="flex:0 0 100px">
+       <input id="suCity" type="text" placeholder="${esc(L("Stadt"))}" style="flex:1">
+     </div>
+     <p class="pe-note">${L("Vorhandene Verkaufsrichtlinien aus deinem eBay-Konto werden übernommen — es wird nichts doppelt angelegt.")}</p>`,
+    async () => {
+      $("sheetSave").disabled = true;
+      try {
+        await post("/api/ebay-setup", {
+          street: $("suStreet").value.trim(),
+          postal_code: $("suPlz").value.trim(),
+          city: $("suCity").value.trim(),
+        });
+        state.me = await api("/api/me").catch(() => state.me);
+        closeSheet(); renderProfile(); toast("Setup abgeschlossen — du kannst jetzt listen", "check");
+      } catch (e) {
+        $("sheetErr").textContent = e.message;
+      } finally { $("sheetSave").disabled = false; }
+    }, L("Setup abschließen"));
+}
+
 function openProfileSheet(me) {
   openSheet(L("Profil"), L("Dein Name erscheint in der App und in deinen Exporten."),
     `<div class="pe-ava" id="peAva">
@@ -2689,7 +2736,7 @@ async function renderProfile() {
     <div class="ilist">
       ${row("link", "#3478f6", "eBay-Konto", rv(me.ebay_connected ? "Verbunden" : "Nicht verbunden"))}
       ${row("bubble", "var(--green)", "Telegram", rv(me.telegram_linked ? "Verknüpft" : "—"))}
-      ${row("gear", "var(--icon-neutral)", "Setup", rv(me.setup_ready ? "Bereit" : "Unvollständig"))}
+      ${row("gear", "var(--icon-neutral)", "Setup", rv(me.setup_ready ? "Bereit" : "Unvollständig"), "profSetup", !me.setup_ready)}
     </div>
     <div class="section-label">App</div>
     <div class="ilist">
@@ -2737,6 +2784,8 @@ async function renderProfile() {
   const pp = $("profPremium");
   if (pp) pp.onclick = openPaywall;
   $("profEdit").onclick = () => openProfileSheet(me);
+  const ps = $("profSetup");
+  if (ps && !me.setup_ready) ps.onclick = () => openSetupSheet(me);
   const links = { profHelp: "/hilfe.html", profPrivacy: "/datenschutz.html", profTerms: "/agb.html" };
   Object.entries(links).forEach(([id, url]) => {
     const b = $(id); if (b) b.onclick = () => window.open(url, "_blank");
@@ -2834,6 +2883,7 @@ async function refreshDetail(force = false) {
    Die Zahl bleibt immer da — aber „Marktwert" heißt nur, was belegt ist.
    spanne = Richtwert (Angebote oder alte Belege), unbekannt = Schätzung. */
 function wertTitel(item) {
+  if (item.est_value === null || item.est_value === undefined) return L("Wert unbekannt");
   if (item.price_state === "unbekannt") return L("Richtwert");
   if (item.price_state === "spanne") return L("Marktwert (Richtwert)");
   return L("Marktwert");
@@ -2845,7 +2895,7 @@ const PREIS_GRUENDE = {
   NUR_ANGEBOTE: "Aus aktiven Angeboten, noch kein belegter Verkauf.",
   UNBEKANNT_ZUORDNUNG: "Preisquelle passt nicht sicher zum Stück.",
   UNBEKANNT_WIDERSPRUCH: "Die Quellen widersprechen sich zu stark.",
-  UNBEKANNT_KEINE_BELEGE: "Keine belastbaren Vergleichsdaten — SERO sucht automatisch weiter.",
+  UNBEKANNT_KEINE_BELEGE: "Keine belastbaren Vergleichsdaten. Beim Listen trägst du deinen Preis selbst ein — findet SERO später Belege, übernimmt es sie.",
 };
 
 /* ── Angebotslage: drei Märkte, ein Umschalter ─────────────────────────────
@@ -2978,9 +3028,8 @@ function renderDetail(det) {
     if (chartVals.length < 2 && item.price_source === "cardmarket") {
       chartVals = [pd.avg30, pd.avg7, pd.avg1, pd.trend].filter((v) => v !== null && v !== undefined);
     }
-    const range = item.est_low && item.est_high ? LF("KI-Schätzung {0} – {1}", money(item.est_low), money(item.est_high)) : "";
-    const marketLine = item.market && !item.market.estimated
-      ? LF("eBay: {0} aktive Angebote · Median {1}", item.market.count, money(item.market.median)) : range;
+    const marketLine = item.market && item.market.median
+      ? LF("eBay: {0} aktive Angebote · Median {1}", item.market.count, money(item.market.median)) : "";
     const updated = item.price_updated
       ? new Date(item.price_updated * 1000).toLocaleDateString("de-DE", { day: "numeric", month: "long" }) + ", " +
         new Date(item.price_updated * 1000).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })
