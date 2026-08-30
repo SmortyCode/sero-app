@@ -32,9 +32,11 @@ still auf Deutsch zurück — kein Fehler, kein roter Test. Wer einen deutschen
 Text ändert, muss den Schlüssel dort mitändern, nicht nur neue Texte
 eintragen. Zeichengenau kopieren (Auslassungspunkte, Anführungszeichen).
 
-**Preise nie erfinden.** Ist die Analyse fertig (`status === "ready"`) und es
-gibt keinen belegten Marktwert, heißt es „Wert unbekannt" — keine Schätzung.
-Solange die Analyse läuft, ist „Wert wird noch ermittelt" richtig und bleibt.
+**Preise nie erfinden** bei Sammelkarten/Katalogware. Ist die Analyse fertig
+(`status === "ready"`) und es gibt keinen belegten Marktwert, heißt es „Wert
+unbekannt" — keine Schätzung. Ausnahme Alltagsprodukte: KI-Richtwert mit
+Hinweis „bitte prüfen". Solange die Analyse läuft, ist „Wert wird noch
+ermittelt" richtig und bleibt.
 
 ## Nicht vorschlagen
 
